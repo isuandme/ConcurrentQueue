@@ -17,7 +17,6 @@ struct Point {
 class Wayqueue {
 private:
     atomic<int> size;
-    atomic<bool> needs_update;
     Point *head, *tail;
     mutex mtx;
     condition_variable cond_var;

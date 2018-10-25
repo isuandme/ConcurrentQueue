@@ -17,10 +17,15 @@ mutex mt;
 void push_method()
 {
     Point *p = new Point();
-    int i;
+    int i, test;
     for(i = 0; i < 20; i++){
         p->x = rand() % 10;
         p->y = rand() % 10;
+        test = rand() % 20;
+        if(test == 6){
+            cout << "test: " << endl;
+            queue.clearAll();
+        }
         queue.push(p);
         mt.lock();
         cout << "__Push: (" << p->x << ", " << p->y << ")" << endl;
@@ -52,5 +57,7 @@ int main(int argv, char * argc[])
     t1.join();
     t2.join();
 
+    queue.display();
+    
     return 0;
 }

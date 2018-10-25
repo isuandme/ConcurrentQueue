@@ -7,7 +7,6 @@ Wayqueue::Wayqueue()
     size = 0;
     head = nullptr;
     tail = nullptr;
-    needs_update = true;
 }
 
 void Wayqueue::push(Point *toAdd)
@@ -25,7 +24,6 @@ void Wayqueue::push(Point *toAdd)
         tail = temp;
     }
     size++;
-    needs_update = false;
     mlock.unlock();
     cond_var.notify_one();
 }
@@ -50,25 +48,22 @@ int Wayqueue::getSize()
     return size;
 }
 
-void clearAll()
+void Wayqueue::clearAll()
 {
     unique_lock<std::mutex> mlock(mtx);
-    Point *curr = new Point();
-    Point *del = new Point();
-    temp = head;
-    while(temp != nullptr)
-    {
-        del = temp;
-        temp = temp->next;
-        delete del;
-    }
-    
+    head = nullptr;
+    tail = nullptr;
+    size = 0;
+    mlock.unlock();
 }
+
 
 void Wayqueue::display()
 {
+    
     Point *temp = new Point();
     temp = head;
+    cout << "Queue: " << endl;
     while(temp != nullptr)
     {
         cout << "(" << temp->x << ", " << temp->y << ")" << endl;
